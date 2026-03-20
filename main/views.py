@@ -17,23 +17,23 @@ class IndexView(TemplateView):
     def get(self,request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         if request.headers.get('HX-request'):
-            return TemplateResponse(request, 'main/home_context.html', context)
-        return TemplateResponse(request. self.template_name, context)
+            return TemplateResponse(request, 'main/home_content.html', context)
+        return TemplateResponse(request, self.template_name, context)
 
 class CatalogView(TemplateView):
-    template = 'main/base.html'
+    template_name = 'main/base.html'
 
     FILTER_MAPPING = {
-        'color': lambda queryset, value: queryset.filter(color_iexact=value),
-        'min_price': lambda queryset, value: queryset.filter(price_gte=value),
-        'max_price': lambda queryset, value: queryset.filter(price_lte=value),
-        'size': lambda queryset, value: queryset.filter(product_size__size__name=value),
+        'color': lambda queryset, value: queryset.filter(color__iexact=value),
+        'min_price': lambda queryset, value: queryset.filter(price__gte=value),
+        'max_price': lambda queryset, value: queryset.filter(price__lte=value),
+        'size': lambda queryset, value: queryset.filter(product_sizes__size__name=value),
     }
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         category_slug = kwargs.get('category_slug')
         categories = Category.objects.all()
-        products = Product.objects.all().order_by('-created_at')
+        products = Product.objects.all().order_by('-created_add')
         current_category = None
 
         if category_slug:
@@ -44,12 +44,12 @@ class CatalogView(TemplateView):
         query = self.request.GET.get('q')
         if query:
             products = products.filter(
-                Q(name__icontains=query) | Q(description_icontains=query)
+                Q(name__icontains=query) | Q(description__icontains=query)
             )   
 
         filter_params = {}
         for param, filter_func in self.FILTER_MAPPING.items():
-            value = self.request.GET.get(param)
+            value = self.request.GET.get(param) 
             if value:
                 products = filter_func(products, value)
                 filter_params[param] = value
@@ -98,7 +98,7 @@ class ProductDetailView(DetailView):
         product = self.get_object()
         context['categories'] = Category.objects.all()
         context['related_products'] = Product.objects.filter(
-            Category = product.category
+            category = product.category
         ).exclude(id=product.id)[:4]
         context['current_category'] = product.category.slug
         return context
@@ -109,7 +109,7 @@ class ProductDetailView(DetailView):
         if request.headers.get('HX-Request'):
             return TemplateResponse(request, 'main/product_detail.html', context)
 
-        raise TemplateResponse(request, self.template_name, context) 
+        return TemplateResponse(request, self.template_name, context) 
     
 
 
