@@ -9,7 +9,7 @@ class ProductImageInLine(admin.TabularInline):
 
 
 class ProductSizeImageInLine(admin.TabularInline):
-    model = ProductImage
+    model = ProductSize
     extra = 1
 
 class ProductAdmin(admin.ModelAdmin):

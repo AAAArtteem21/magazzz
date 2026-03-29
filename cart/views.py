@@ -21,7 +21,7 @@ class CartMixin:
             session_key = request.session.session_key
         )
 
-        request.sesssion['cart_id'] = cart.id
+        request.session['cart_id'] = cart.id
         request.session.modified = True
         return cart
     
@@ -41,7 +41,7 @@ class AddToCartView(CartMixin, View):
     @transaction.atomic
     def post(self, request, slug):
         cart = self.get_cart(request)
-        product = get_object_or_404(product, slug=slug)
+        product = get_object_or_404(Product, slug=slug)
 
         form = AddToCartForm(request.POST, product=product)
 
