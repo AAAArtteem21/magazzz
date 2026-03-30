@@ -26,7 +26,7 @@ class CustomUserCreationForm(UserCreationForm):
 
 
     def clean_email(self):
-        email = self.changed_data.get('email')
+        email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError('This email is already in use')
         return email
@@ -53,7 +53,7 @@ class CustomUserLoginForm(AuthenticationForm):
             self.user_cache = authenticate(self.request, email=email,password=password)
             if self.user_cache is None:
                 raise forms.ValidationError('Invalid email or password.')
-            elif not self.user_cache.is_active():
+            elif not self.user_cache.is_active:
                 raise forms.ValidationError('This account is inactive.')
             return self.cleaned_data
         
@@ -80,7 +80,7 @@ class CustomUserUpdateForm(forms.ModelForm):
 
     class Meta:
         model = User
-        field = ('first_name','last_name','email','company',
+        fields = ('first_name','last_name','email','company',
                  'address1','address2','city','country',
                  'province','postal_code','phone')
         widgets = {
@@ -95,7 +95,7 @@ class CustomUserUpdateForm(forms.ModelForm):
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        if email and User.objects.filter(email=email).exclude(id=self.instance.id).exists:
+        if email and User.objects.filter(email=email).exclude(id=self.instance.id).exists():
             raise forms.ValidationError('This email is already in use.')
         return email
     
