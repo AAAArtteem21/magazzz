@@ -9,6 +9,7 @@ from .forms import CustomUserCreationForm, CustomUserLoginForm, \
 from .models import CustomUser
 from django.contrib import messages
 from main.models import Product
+from orders.models import *
 
 def register(request):
     if request.method == 'POST':
@@ -94,8 +95,13 @@ def logout_view(request):
     
 
 
+def order_history(request):
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'users/partials/order_history.html', {'orders': orders})
 
 
-
+def order_detail(request,order_id):
+    orders = Order.objects.get(id=order_id, user=request.user)
+    return render(request, 'users/partials/order_detail.html',{'orders': orders})
 
 

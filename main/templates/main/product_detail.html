@@ -98,8 +98,9 @@
                     ADD TO CART
                 </button>
                 
-                <button class="w-full border border-gray-300 py-3 px-6 text-sm font-medium hover:border-gray-900 transition-colors">
-                    ADD TO WISHLIST
+                <button class="w-full border border-gray-300 py-3 px-6 text-sm font-medium hover:border-gray-900 transition-colors"
+                        onclick="goToCheckout()">
+                    BUY NOW
                 </button>
             </div>
 
@@ -238,6 +239,9 @@
             console.error('Error:', error);
             showNotification('Error adding to cart');
         });
+    }
+    function goToCheckout() {
+    window.location.href = "{% url 'orders:checkout' %}";
     }
     function getCookie(name) {
         let cookieValue = null;
