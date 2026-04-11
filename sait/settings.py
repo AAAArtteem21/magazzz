@@ -85,12 +85,12 @@ WSGI_APPLICATION = 'sait.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.postgresl',
         'NAME': os.getenv('POSTGRES_DB'),
         'USER': os.getenv('POSTGRES_USER'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': os.getenv('POSTGRES_HOST,' 'db'),
-        'PORT': os.getenv('PORTGRES_PORT','5432'),
+        'HOST': os.getenv('POSTGRES_HOST,', 'db'),
+        'PORT': os.getenv('POSTGRES_PORT','5432'),
         'ATOMIC_REQUESTES': True
     }
 }
@@ -134,7 +134,7 @@ STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR,)
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
